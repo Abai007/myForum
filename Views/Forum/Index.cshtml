@@ -21,12 +21,16 @@
     {
 
 <tbody>
+    <a >
+        <div>
     <tr onclick="GetId('@topic.Id')">
         <th scope="row">@topic.Id</th>
         <td>@topic.AuthorName</td>
         <td>@topic.Title</td>
         <td>@topic.Description</td>
     </tr>
+    </div>
+    </a>
 </tbody>}
 </table>}
 @section Scripts
@@ -34,6 +38,7 @@
     <script>
         function GetId(id) {
             $.get('@Url.Action("Deitels", "Forum")?id=' + id);
+            window.location.href = '/Forum/Deitels?id=' + id
             console.log(id);
         }
     </script>

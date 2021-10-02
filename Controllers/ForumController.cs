@@ -58,10 +58,35 @@ namespace MyForum.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index", "Forum");
         }
-        public IActionResult Deitels(int id)
+        public IActionResult Deitels(Answer answer)
         {
-            Topic topic = _db.Topics.FirstOrDefault(t => t.Id == id);
+            Topic topic = new Topic();
+            if (answer.UserId != null)
+            {
+                topic = _db.Topics.FirstOrDefault(t => t.Id == answer.TopicId);
+                topic.User = _db.Users.FirstOrDefault(u => u.Id == topic.UserId);
+                topic.Answers = _db.Answers.Where(a => a.TopicId == topic.Id).ToList();
+            }
+            if(answer.UserId == null)
+            {
+                topic = _db.Topics.FirstOrDefault(t => t.Id == answer.Id);
+                topic.User = _db.Users.FirstOrDefault(u => u.Id == topic.UserId);
+                topic.Answers = _db.Answers.Where(a => a.TopicId == topic.Id).ToList();
+            }
             return View(topic);
+        }
+        [HttpPost]
+        public IActionResult Deitel(string Id, string body)
+        {
+            int id = int.Parse(Id);
+            Answer answer = new Answer();
+            answer.AnswerText = body;
+            answer.TopicId = id;
+            answer.CreateDate = DateTime.Now;
+            answer.UserId = CurrentUser().Result.Id;
+            _db.Answers.Add(answer);
+            _db.SaveChanges();
+            return RedirectToAction("Deitels", answer);
         }
     }
 }

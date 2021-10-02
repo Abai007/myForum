@@ -1,1 +1,85 @@
-﻿
+﻿@model Topic
+
+@{
+
+    ViewBag.Title = "Topic";
+    Layout = "_Layout";
+}
+<h2>Продукт</h2>
+<div class="table_section">
+    <table style="width: 100%">
+        <tr>
+            <td>@Model.AuthorName</td>
+            <td>@Model.CreateDate</td>
+        </tr>
+    </table>
+</div>
+<div>
+    <p>@Model.Description</p>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Ответить
+    </button>
+</div>
+@if (Model.Answers.Count != 0)
+{
+    @foreach (var answer in @Model.Answers)
+    {
+        <div>
+            <div>
+                <img src="@answer.User.Avatar" width="100" alt="Avatar" />
+            </div>
+            <h6>@answer.User.Name</h6><br />
+            <div>
+                <p>@answer.CreateDate</p><br />
+                <p>@answer.AnswerText</p>
+            </div>
+                                      
+        </div>
+    }
+
+
+            }
+            else
+            {
+                <h5>Ответов пока нет!</h5>
+            }
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="postdiv-@Model.Id">
+                <input type="text" id="answer" class="form-control input-lg" value=""><br />
+                <input type="button" id="postComment" onclick="Answer('@Model.Id')" value="Отправить"/>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+    {
+    <script>
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus')
+        });
+        function Answer(Id) {
+
+            $.ajax({
+
+                url: '@Url.Action("Deitel", "Forum")',
+
+                type: 'POST',
+
+                data: { 'Id': Id, 'body': $('#answer').val() },
+
+                success: console.log('ок')
+
+            });
+
+           }
+    </script>
+}   
