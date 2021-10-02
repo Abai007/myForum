@@ -11,6 +11,8 @@ namespace MyForum.Models
     {
         public DbSet<User> ForumUsers { get; set; }
         public DbSet<ImageModel> ImageModels { get; set; }
+        public DbSet<Topic> Topics { get; set; }
+        public DbSet<Answer> Answers { get; set; }
         public ForumContext(DbContextOptions<ForumContext> options) : base(options)
         {
         }

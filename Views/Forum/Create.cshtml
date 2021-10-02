@@ -1,0 +1,33 @@
+﻿@model Topic
+<form method="post" asp-controller="Forum" asp-action="Create">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+
+        <label asp-for="Title"></label><br />
+
+        <input asp-for="Title" />
+
+        <span asp-validation-for="Title"></span>
+
+    </div>
+    <div>
+
+        <label asp-for="Description"></label><br />
+
+        <input asp-for="Description" />
+
+        <span asp-validation-for="Description"></span>
+
+    </div>
+    <div>
+
+        <input type="submit" value="Публикавать" />
+
+    </div>
+
+</form>
+@section Scripts
+        {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

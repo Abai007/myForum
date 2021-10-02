@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyForum.Migrations
 {
     [DbContext(typeof(ForumContext))]
-    [Migration("20211002074948_Initial")]
-    partial class Initial
+    [Migration("20211002083844_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -151,6 +151,34 @@ namespace MyForum.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("MyForum.Models.Answer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("AnswerText")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("TopicId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TopicId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Answers");
+                });
+
             modelBuilder.Entity("MyForum.Models.ImageModel", b =>
                 {
                     b.Property<int>("Id")
@@ -175,6 +203,38 @@ namespace MyForum.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ImageModels");
+                });
+
+            modelBuilder.Entity("MyForum.Models.Topic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("AnswerCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("AuthorName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Topics");
                 });
 
             modelBuilder.Entity("MyForum.Models.User", b =>
@@ -301,6 +361,23 @@ namespace MyForum.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MyForum.Models.Answer", b =>
+                {
+                    b.HasOne("MyForum.Models.Topic", "Topic")
+                        .WithMany("Answers")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyForum.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Topic");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MyForum.Models.ImageModel", b =>
                 {
                     b.HasOne("MyForum.Models.User", "User")
@@ -308,6 +385,20 @@ namespace MyForum.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MyForum.Models.Topic", b =>
+                {
+                    b.HasOne("MyForum.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MyForum.Models.Topic", b =>
+                {
+                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

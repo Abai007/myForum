@@ -12,7 +12,7 @@ namespace MyForum.Models
         public DateTime CreateDate { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
-        public string TopicId { get; set; }
+        public int TopicId { get; set; }
         public Topic Topic { get; set; }
     }
 }

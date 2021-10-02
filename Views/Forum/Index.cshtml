@@ -1,0 +1,40 @@
+﻿@model List<Topic>
+@{ ViewBag.Title = "topics";
+    Layout = "_Layout"; }
+<h2>Категории</h2>
+@if (@Model == null)
+{
+<p>Темы еще не добавлены</p> }
+            else
+            {
+
+<table class="table table-striped table-dark">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Автор</th>
+            <th scope="col">Тема</th>
+            <th scope="col">Описание</th>
+        </tr>
+    </thead>
+    @foreach (var topic in @Model)
+    {
+
+<tbody>
+    <tr onclick="GetId('@topic.Id')">
+        <th scope="row">@topic.Id</th>
+        <td>@topic.AuthorName</td>
+        <td>@topic.Title</td>
+        <td>@topic.Description</td>
+    </tr>
+</tbody>}
+</table>}
+@section Scripts
+    {
+    <script>
+        function GetId(id) {
+            $.get('@Url.Action("Deitels", "Forum")?id=' + id);
+            console.log(id);
+        }
+    </script>
+}   
